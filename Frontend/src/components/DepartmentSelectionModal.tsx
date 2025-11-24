@@ -36,8 +36,15 @@ export const DepartmentSelectionModal: React.FC<DepartmentSelectionModalProps> =
             setIsFetchingCategories(true);
             const response = await apiClient.get('/complaints/categories');
 
+            // Filter to show only main department categories
+            const mainCategories = response.data.filter((cat: Category) =>
+                ['Academics', 'Administration', 'Clubs', 'Events', 'Hostel', 'IT',
+                    'Maintenance', 'Mess', 'Cafeteria', 'Sports', 'Transport'].includes(cat.name) ||
+                cat.name.includes('Clubs') || cat.name.includes('Events')
+            );
+
             // Map category names for cleaner display
-            const displayCategories = response.data.map((cat: Category) => ({
+            const displayCategories = mainCategories.map((cat: Category) => ({
                 ...cat,
                 displayName: cat.name === 'Clubs & Societies' ? 'Clubs' :
                     cat.name === 'Events & campus activities' ? 'Events' :

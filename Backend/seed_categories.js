@@ -3,7 +3,8 @@ const db = require("./Configs/db");
 const categories = [
     { name: "Academics", department_id: 1 },
     { name: "Hostel", department_id: 3 },
-    { name: "Mess/Cafeteria", department_id: 3 },
+    { name: "Mess", department_id: 3 },
+    { name: "Cafeteria", department_id: 2 },
     { name: "IT & Technical problems", department_id: 2 },
     { name: "Transport", department_id: 2 },
     { name: "Maintenance", department_id: 2 },
