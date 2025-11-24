@@ -49,8 +49,8 @@ export const SignupPage: React.FC = () => {
                     password: data.password
                 });
 
-                // Store token and user info
-                localStorage.setItem('token', loginResponse.data.token);
+                // Store token and user info (use 'auth_token' to match API client)
+                localStorage.setItem('auth_token', loginResponse.data.token);
                 localStorage.setItem('user', JSON.stringify(loginResponse.data.user));
 
                 // Show department selection modal
