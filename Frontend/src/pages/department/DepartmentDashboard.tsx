@@ -54,30 +54,29 @@ export const DepartmentDashboard: React.FC = () => {
         <MainLayout>
             <div className="space-y-6">
                 {/* Header Section */}
-                <div className="bg-gradient-to-r from-orange-50 via-orange-100 to-blue-100 rounded-2xl p-8 shadow-sm border border-orange-200">
-                    <div className="flex items-center gap-6">
-                        <div className="bg-white p-4 rounded-xl shadow-md">
-                            <div className="w-20 h-20 flex items-center justify-center">
-                                <img
-                                    src="/jklu-logo.png"
-                                    alt="JKLU Logo"
-                                    className="w-full h-full object-contain"
-                                    onError={(e) => {
-                                        e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="40" fill="%23f97316"/%3E%3Ctext x="50" y="60" font-size="40" text-anchor="middle" fill="white"%3EJ%3C/text%3E%3C/svg%3E';
-                                    }}
-                                />
-                            </div>
+
+                <div className="bg-gradient-to-r from-orange-100 to-blue-100 rounded-2xl p-8 shadow-sm border border-white/50">
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+                        <div className="bg-white p-4 rounded-xl shadow-sm">
+                            <img
+                                src="/JKLU logo.png"
+                                alt="JKLU Logo"
+                                className="h-32 w-32 object-contain"
+                                onError={(e) => {
+                                    e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="40" fill="%23f97316"/%3E%3Ctext x="50" y="60" font-size="40" text-anchor="middle" fill="white"%3EJ%3C/text%3E%3C/svg%3E';
+                                }}
+                            />
                         </div>
-                        <div className="flex-1">
-                            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                        <div className="text-center md:text-left space-y-2">
+                            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
                                 Feedback & Complaint System
                             </h1>
-                            <p className="text-gray-700 leading-relaxed">
+                            <p className="text-lg text-gray-600 max-w-2xl">
                                 Your voice matters. Submit complaints, track progress, and share feedback. We are
                                 committed to continuous improvement and valuing every student's input.
                             </p>
-                            <p className="text-sm text-gray-600 mt-2">
-                                Welcome, <span className="font-semibold">{user?.name}</span> - Department Head
+                            <p className="text-sm text-gray-600 mt-2 font-medium">
+                                Welcome, <span className="font-bold text-gray-900">{user?.name}</span> - Department Head
                             </p>
                         </div>
                     </div>
