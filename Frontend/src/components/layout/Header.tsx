@@ -11,7 +11,9 @@ export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const isDashboard = location.pathname === '/dashboard' || location.pathname === '/dashboard/';
+    const isDashboard = location.pathname === '/dashboard' ||
+        location.pathname === '/department/dashboard' ||
+        location.pathname === '/admin/dashboard';
 
     const handleLogout = () => {
         logout();
