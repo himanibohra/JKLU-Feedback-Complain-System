@@ -1,4 +1,4 @@
-# UI Update: Dashboard Header & Navbar
+# UI Update: Categories & Dashboard
 
 ## Dashboard Header (Department Head)
 Updated the header section of the Department Head Dashboard (`DepartmentDashboard.tsx`) to match the visual style of the Student Dashboard.
@@ -12,10 +12,16 @@ Updated `Header.tsx` to hide the logo and "Feedback & Complaint System" title fr
 -   **Goal**: Prevent redundancy since the dashboard page content already displays the logo and title prominently.
 -   **Result**: Cleaner navbar on dashboard pages, matching the Student Dashboard look.
 
+## Student Complaint Form
+Updated `ComplaintCreatePage.tsx` to filter the "Category" dropdown options.
+-   **Goal**: Ensure students can only select categories that correspond to valid Department Head roles (e.g., Mess, Transport, IT, etc.).
+-   **Change**: Filtered out broad or unused categories and mapped long names to shorter, user-friendly names (e.g., "IT & Technical problems" -> "IT").
+-   **Result**: Consistent category selection between Student and Department Head views.
+
 ## Verification
-1.  **Login** as Department Head.
-2.  **Check Navbar**: It should be empty on the left side (no logo/title).
-3.  **Check Page Header**: It should show the large logo and title in the gradient box.
+1.  **Login** as Student.
+2.  **Go to** "Add Complaint".
+3.  **Check Category Dropdown**: It should list specific categories like "Mess", "Transport", "IT", etc., matching the options available to Department Heads.
 
 ---
 **Status**: ✅ Updated

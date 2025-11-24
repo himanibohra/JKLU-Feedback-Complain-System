@@ -90,11 +90,24 @@ export const ComplaintCreatePage: React.FC = () => {
                                 </label>
                                 <select id="categoryId" {...register('categoryId')} className="input">
                                     <option value="">Select a category</option>
-                                    {categories.map((category) => (
-                                        <option key={category.id} value={category.id}>
-                                            {category.name}
-                                        </option>
-                                    ))}
+                                    {categories
+                                        .filter((cat) =>
+                                            ['Academics', 'Administration', 'Clubs', 'Events', 'Hostel', 'IT',
+                                                'Maintenance', 'Mess', 'Cafeteria', 'Sports', 'Transport'].includes(cat.name) ||
+                                            cat.name.includes('Clubs') || cat.name.includes('Events') || cat.name.includes('IT') || cat.name.includes('Admin')
+                                        )
+                                        .map((category) => {
+                                            const displayName = category.name === 'Clubs & Societies' ? 'Clubs' :
+                                                category.name === 'Events & campus activities' ? 'Events' :
+                                                    category.name === 'IT & Technical problems' ? 'IT' :
+                                                        category.name === 'Admin' ? 'Administration' :
+                                                            category.name;
+                                            return (
+                                                <option key={category.id} value={category.id}>
+                                                    {displayName}
+                                                </option>
+                                            );
+                                        })}
                                 </select>
                                 {errors.categoryId && (
                                     <p className="text-red-500 text-sm mt-1">{errors.categoryId.message}</p>
