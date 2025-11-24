@@ -49,8 +49,9 @@ export const SignupPage: React.FC = () => {
                     password: data.password
                 });
 
-                // Store token temporarily
+                // Store token and user info
                 localStorage.setItem('token', loginResponse.data.token);
+                localStorage.setItem('user', JSON.stringify(loginResponse.data.user));
 
                 // Show department selection modal
                 setShowDepartmentModal(true);
@@ -68,16 +69,19 @@ export const SignupPage: React.FC = () => {
 
     const handleDepartmentSuccess = () => {
         setShowDepartmentModal(false);
-        localStorage.removeItem('token'); // Clear temporary token
-        toast.success('Department assigned! Please login to continue.');
-        navigate('/login');
+        toast.success('Department assigned successfully!');
+        // Redirect to department dashboard instead of login
+        navigate('/department/dashboard');
+        // Reload to update auth context
+        window.location.reload();
     };
 
     const handleDepartmentModalClose = () => {
         setShowDepartmentModal(false);
-        localStorage.removeItem('token'); // Clear temporary token
         toast('You can set your department later from your profile.');
-        navigate('/login');
+        // Still redirect to dashboard even if they skip
+        navigate('/department/dashboard');
+        window.location.reload();
     };
 
     return (
