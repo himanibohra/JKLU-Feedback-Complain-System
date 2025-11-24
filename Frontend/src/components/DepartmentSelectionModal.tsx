@@ -4,9 +4,9 @@ import { apiClient } from '@/api/client';
 import toast from 'react-hot-toast';
 
 interface Category {
-    id: number;
+    id: string;
     name: string;
-    department_id: number;
+    departmentId: string;
 }
 
 interface DepartmentSelectionModalProps {
@@ -21,7 +21,7 @@ export const DepartmentSelectionModal: React.FC<DepartmentSelectionModalProps> =
     onSuccess
 }) => {
     const [categories, setCategories] = useState<Category[]>([]);
-    const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isFetchingCategories, setIsFetchingCategories] = useState(true);
 
@@ -81,8 +81,9 @@ export const DepartmentSelectionModal: React.FC<DepartmentSelectionModalProps> =
             }
 
             // Update user's department based on the category's department
+            // API expects department_id, but our category object has departmentId (from API response)
             await apiClient.put(`/auth/update-department`, {
-                department_id: category.department_id
+                department_id: category.departmentId
             });
 
             toast.success('Department assigned successfully!');
