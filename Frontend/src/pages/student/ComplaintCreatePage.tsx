@@ -93,17 +93,20 @@ export const ComplaintCreatePage: React.FC = () => {
                                     {(() => {
                                         // Filter and map categories first
                                         const processedCategories = categories
-                                            .filter((cat) =>
-                                                ['Academics', 'Administration', 'Clubs', 'Events', 'Hostel', 'IT',
-                                                    'Maintenance', 'Mess', 'Cafeteria', 'Sports', 'Transport'].includes(cat.name) ||
-                                                cat.name.includes('Clubs') || cat.name.includes('Events') || cat.name.includes('IT') || cat.name.includes('Admin')
-                                            )
+                                            .filter((cat) => {
+                                                // Explicitly exclude IT and Administration as requested
+                                                if (['Admin', 'Administration', 'IT', 'IT & Technical problems'].includes(cat.name)) {
+                                                    return false;
+                                                }
+
+                                                return ['Academics', 'Clubs', 'Events', 'Hostel',
+                                                    'Maintenance', 'Mess', 'Cafeteria', 'Sports', 'Transport', 'IT Support', 'General Administration'].includes(cat.name) ||
+                                                    cat.name.includes('Clubs') || cat.name.includes('Events') || cat.name.includes('IT') || cat.name.includes('Admin');
+                                            })
                                             .map((category) => {
                                                 const displayName = category.name === 'Clubs & Societies' ? 'Clubs' :
                                                     category.name === 'Events & campus activities' ? 'Events' :
-                                                        category.name === 'IT & Technical problems' ? 'IT' :
-                                                            category.name === 'Admin' ? 'Administration' :
-                                                                category.name;
+                                                        category.name;
                                                 return { ...category, displayName };
                                             });
 
