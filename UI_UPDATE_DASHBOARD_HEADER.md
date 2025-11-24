@@ -13,15 +13,18 @@ Updated `Header.tsx` to hide the logo and "Feedback & Complaint System" title fr
 -   **Result**: Cleaner navbar on dashboard pages, matching the Student Dashboard look.
 
 ## Student Complaint Form
-Updated `ComplaintCreatePage.tsx` to filter the "Category" dropdown options.
--   **Goal**: Ensure students can only select categories that correspond to valid Department Head roles (e.g., Mess, Transport, IT, etc.).
--   **Change**: Filtered out broad or unused categories and mapped long names to shorter, user-friendly names (e.g., "IT & Technical problems" -> "IT").
--   **Result**: Consistent category selection between Student and Department Head views.
+Updated `ComplaintCreatePage.tsx` to filter and deduplicate the "Category" dropdown options.
+-   **Goal**: Ensure students can only select categories that correspond to valid Department Head roles, and remove duplicate entries.
+-   **Change**: 
+    -   Filtered out broad or unused categories.
+    -   Mapped long names to shorter, user-friendly names (e.g., "IT & Technical problems" -> "IT").
+    -   **Deduplication**: Implemented logic to remove duplicate category names from the dropdown, ensuring a clean list.
+-   **Result**: Consistent and clean category selection between Student and Department Head views.
 
 ## Verification
 1.  **Login** as Student.
 2.  **Go to** "Add Complaint".
-3.  **Check Category Dropdown**: It should list specific categories like "Mess", "Transport", "IT", etc., matching the options available to Department Heads.
+3.  **Check Category Dropdown**: It should list specific categories like "Mess", "Transport", "IT", etc., without any duplicates.
 
 ---
 **Status**: ✅ Updated

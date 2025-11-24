@@ -90,24 +90,37 @@ export const ComplaintCreatePage: React.FC = () => {
                                 </label>
                                 <select id="categoryId" {...register('categoryId')} className="input">
                                     <option value="">Select a category</option>
-                                    {categories
-                                        .filter((cat) =>
-                                            ['Academics', 'Administration', 'Clubs', 'Events', 'Hostel', 'IT',
-                                                'Maintenance', 'Mess', 'Cafeteria', 'Sports', 'Transport'].includes(cat.name) ||
-                                            cat.name.includes('Clubs') || cat.name.includes('Events') || cat.name.includes('IT') || cat.name.includes('Admin')
-                                        )
-                                        .map((category) => {
-                                            const displayName = category.name === 'Clubs & Societies' ? 'Clubs' :
-                                                category.name === 'Events & campus activities' ? 'Events' :
-                                                    category.name === 'IT & Technical problems' ? 'IT' :
-                                                        category.name === 'Admin' ? 'Administration' :
-                                                            category.name;
-                                            return (
-                                                <option key={category.id} value={category.id}>
-                                                    {displayName}
-                                                </option>
-                                            );
-                                        })}
+                                    {(() => {
+                                        // Filter and map categories first
+                                        const processedCategories = categories
+                                            .filter((cat) =>
+                                                ['Academics', 'Administration', 'Clubs', 'Events', 'Hostel', 'IT',
+                                                    'Maintenance', 'Mess', 'Cafeteria', 'Sports', 'Transport'].includes(cat.name) ||
+                                                cat.name.includes('Clubs') || cat.name.includes('Events') || cat.name.includes('IT') || cat.name.includes('Admin')
+                                            )
+                                            .map((category) => {
+                                                const displayName = category.name === 'Clubs & Societies' ? 'Clubs' :
+                                                    category.name === 'Events & campus activities' ? 'Events' :
+                                                        category.name === 'IT & Technical problems' ? 'IT' :
+                                                            category.name === 'Admin' ? 'Administration' :
+                                                                category.name;
+                                                return { ...category, displayName };
+                                            });
+
+                                        // Deduplicate based on displayName
+                                        const uniqueCategories = new Map();
+                                        processedCategories.forEach(cat => {
+                                            if (!uniqueCategories.has(cat.displayName)) {
+                                                uniqueCategories.set(cat.displayName, cat);
+                                            }
+                                        });
+
+                                        return Array.from(uniqueCategories.values()).map((category) => (
+                                            <option key={category.id} value={category.id}>
+                                                {category.displayName}
+                                            </option>
+                                        ));
+                                    })()}
                                 </select>
                                 {errors.categoryId && (
                                     <p className="text-red-500 text-sm mt-1">{errors.categoryId.message}</p>
