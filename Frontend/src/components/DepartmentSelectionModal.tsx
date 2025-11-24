@@ -3,9 +3,10 @@ import { X, Building2 } from 'lucide-react';
 import { apiClient } from '@/api/client';
 import toast from 'react-hot-toast';
 
-interface Department {
-    department_id: number;
+interface Category {
+    id: number;
     name: string;
+    department_id: number;
 }
 
 interface DepartmentSelectionModalProps {
@@ -19,43 +20,62 @@ export const DepartmentSelectionModal: React.FC<DepartmentSelectionModalProps> =
     onClose,
     onSuccess
 }) => {
-    const [departments, setDepartments] = useState<Department[]>([]);
-    const [selectedDepartment, setSelectedDepartment] = useState<number | null>(null);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [isFetchingDepartments, setIsFetchingDepartments] = useState(true);
+    const [isFetchingCategories, setIsFetchingCategories] = useState(true);
 
     useEffect(() => {
         if (isOpen) {
-            fetchDepartments();
+            fetchCategories();
         }
     }, [isOpen]);
 
-    const fetchDepartments = async () => {
+    const fetchCategories = async () => {
         try {
-            setIsFetchingDepartments(true);
-            const response = await apiClient.get('/department');
-            setDepartments(response.data);
+            setIsFetchingCategories(true);
+            const response = await apiClient.get('/complaints/categories');
+
+            // Map category names for cleaner display
+            const displayCategories = response.data.map((cat: Category) => ({
+                ...cat,
+                displayName: cat.name === 'Clubs & Societies' ? 'Clubs' :
+                    cat.name === 'Events & campus activities' ? 'Events' :
+                        cat.name === 'IT & Technical problems' ? 'IT' :
+                            cat.name === 'Admin' ? 'Administration' :
+                                cat.name
+            }));
+
+            setCategories(displayCategories);
         } catch (error: any) {
-            toast.error('Failed to load departments');
-            console.error('Error fetching departments:', error);
+            toast.error('Failed to load categories');
+            console.error('Error fetching categories:', error);
         } finally {
-            setIsFetchingDepartments(false);
+            setIsFetchingCategories(false);
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!selectedDepartment) {
-            toast.error('Please select a department');
+        if (!selectedCategory) {
+            toast.error('Please select a category');
             return;
         }
 
         setIsLoading(true);
         try {
-            // Update user's department
+            // Find the selected category to get its department_id
+            const category = categories.find(cat => cat.id === selectedCategory);
+
+            if (!category) {
+                toast.error('Invalid category selected');
+                return;
+            }
+
+            // Update user's department based on the category's department
             await apiClient.put(`/auth/update-department`, {
-                department_id: selectedDepartment
+                department_id: category.department_id
             });
 
             toast.success('Department assigned successfully!');
@@ -71,7 +91,7 @@ export const DepartmentSelectionModal: React.FC<DepartmentSelectionModalProps> =
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-lg shadow-xl w-full max-w-lg p-6 relative">
+            <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl p-6 relative max-h-[90vh] overflow-y-auto">
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
@@ -90,11 +110,11 @@ export const DepartmentSelectionModal: React.FC<DepartmentSelectionModalProps> =
                         </h2>
                     </div>
                     <p className="text-gray-600 text-sm">
-                        As a department head, please select which department you will manage.
+                        As a department head, please select which department/category you will manage.
                     </p>
                 </div>
 
-                {isFetchingDepartments ? (
+                {isFetchingCategories ? (
                     <div className="flex justify-center py-8">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
                     </div>
@@ -102,35 +122,35 @@ export const DepartmentSelectionModal: React.FC<DepartmentSelectionModalProps> =
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-3">
-                                Department
+                                Department Category
                             </label>
                             {/* 2-Column Grid Layout */}
                             <div className="grid grid-cols-2 gap-3">
-                                {departments.map((dept) => (
+                                {categories.map((category) => (
                                     <label
-                                        key={dept.department_id}
-                                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all ${selectedDepartment === dept.department_id
+                                        key={category.id}
+                                        className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all ${selectedCategory === category.id
                                                 ? 'border-orange-500 bg-orange-50'
                                                 : 'border-gray-200 hover:border-orange-300 hover:bg-gray-50'
                                             }`}
                                     >
                                         <input
                                             type="radio"
-                                            name="department"
-                                            value={dept.department_id}
-                                            checked={selectedDepartment === dept.department_id}
-                                            onChange={() => setSelectedDepartment(dept.department_id)}
+                                            name="category"
+                                            value={category.id}
+                                            checked={selectedCategory === category.id}
+                                            onChange={() => setSelectedCategory(category.id)}
                                             className="w-4 h-4 text-orange-600 focus:ring-orange-500 flex-shrink-0"
                                         />
                                         <span className="ml-3 text-gray-900 font-medium text-sm">
-                                            {dept.name}
+                                            {(category as any).displayName || category.name}
                                         </span>
                                     </label>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="flex gap-3">
+                        <div className="flex gap-3 pt-4">
                             <button
                                 type="button"
                                 onClick={onClose}
@@ -141,7 +161,7 @@ export const DepartmentSelectionModal: React.FC<DepartmentSelectionModalProps> =
                             </button>
                             <button
                                 type="submit"
-                                disabled={isLoading || !selectedDepartment}
+                                disabled={isLoading || !selectedCategory}
                                 className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isLoading ? 'Saving...' : 'Continue'}
