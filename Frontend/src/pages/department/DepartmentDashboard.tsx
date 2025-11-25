@@ -72,8 +72,8 @@ export const DepartmentDashboard: React.FC = () => {
                                 Feedback & Complaint System
                             </h1>
                             <p className="text-lg text-gray-600 max-w-2xl">
-                                Your voice matters. Submit complaints, track progress, and share feedback. We are
-                                committed to continuous improvement and valuing every student's input.
+                                Manage and resolve complaints from students and faculty. Review submissions, track progress,
+                                and ensure timely resolution to maintain a positive campus environment.
                             </p>
                             <p className="text-sm text-gray-600 mt-2 font-medium">
                                 Welcome, <span className="font-bold text-gray-900">{user?.name}</span> - Department Head
