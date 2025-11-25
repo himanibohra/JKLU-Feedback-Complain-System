@@ -79,7 +79,8 @@ export const ComplaintDetailModal: React.FC<ComplaintDetailModalProps> = ({ comp
                 { id: complaintId, status: 'closed' },
                 {
                     onSuccess: () => {
-                        // Modal will auto-refresh with new data
+                        // Close the modal after successful update
+                        onClose();
                     }
                 }
             );
@@ -92,7 +93,8 @@ export const ComplaintDetailModal: React.FC<ComplaintDetailModalProps> = ({ comp
                 { id: complaintId, status: 'pending' },
                 {
                     onSuccess: () => {
-                        // Modal will auto-refresh with new data
+                        // Close the modal after successful update
+                        onClose();
                     }
                 }
             );
