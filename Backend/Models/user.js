@@ -16,7 +16,15 @@ const User = {
 
   findByEmail: (email) => {
     return new Promise((resolve, reject) => {
-      db.query("SELECT * FROM users WHERE email = ?", [email], (err, rows) => {
+      const query = `
+        SELECT 
+          u.*,
+          d.name AS department_name
+        FROM users u
+        LEFT JOIN departments d ON u.department_id = d.department_id
+        WHERE u.email = ?
+      `;
+      db.query(query, [email], (err, rows) => {
         if (err) reject(err);
         else resolve(rows[0]);
       });
@@ -25,7 +33,15 @@ const User = {
 
   findById: (user_id) => {
     return new Promise((resolve, reject) => {
-      db.query("SELECT * FROM users WHERE user_id = ?", [user_id], (err, rows) => {
+      const query = `
+        SELECT 
+          u.*,
+          d.name AS department_name
+        FROM users u
+        LEFT JOIN departments d ON u.department_id = d.department_id
+        WHERE u.user_id = ?
+      `;
+      db.query(query, [user_id], (err, rows) => {
         if (err) reject(err);
         else resolve(rows[0]);
       });
@@ -44,4 +60,3 @@ const User = {
 };
 
 module.exports = User;
-

@@ -48,6 +48,7 @@ exports.login = async (req, res) => {
       name: user.name,
       role: user.role,
       departmentId: user.department_id,
+      departmentName: user.department_name,
       createdAt: user.created_at || new Date().toISOString()
     };
 
