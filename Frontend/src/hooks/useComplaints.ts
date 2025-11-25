@@ -101,9 +101,10 @@ export const useUpdateComplaintStatus = () => {
             const response = await apiClient.put(`/complaints/${id}/status`, { status, note });
             return response.data;
         },
-        onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({ queryKey: ['complaint', variables.id] });
-            queryClient.invalidateQueries({ queryKey: ['complaints'] });
+        onSuccess: async (_, variables) => {
+            // Invalidate and refetch immediately
+            await queryClient.invalidateQueries({ queryKey: ['complaint', variables.id] });
+            await queryClient.refetchQueries({ queryKey: ['complaints'] });
             toast.success('Status updated successfully!');
         },
     });
