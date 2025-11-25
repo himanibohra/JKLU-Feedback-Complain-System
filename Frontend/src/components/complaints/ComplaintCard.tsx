@@ -55,7 +55,7 @@ export const ComplaintCard: React.FC<ComplaintCardProps> = ({ complaint, onViewD
 
                     <button
                         onClick={() => onViewDetail(complaint.id)}
-                        className="btn btn-sm btn-primary flex items-center gap-2"
+                        className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors shadow-sm"
                     >
                         <Eye size={16} />
                         View Complete Detail
