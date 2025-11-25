@@ -91,6 +91,42 @@ const Complaint = {
     });
   },
 
+  // Get complaints by department (for department heads)
+  getByDepartment: (department_id) => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT 
+          c.complaint_id,
+          c.user_id,
+          c.title,
+          c.description,
+          c.category_id,
+          c.department_id,
+          c.location,
+          c.priority,
+          c.status,
+          c.is_anonymous,
+          c.reference_code,
+          cat.name AS category_name,
+          d.name AS department_name,
+          u.name AS user_name,
+          c.created_at,
+          c.updated_at
+        FROM complaints c
+        JOIN categories cat ON c.category_id = cat.category_id
+        JOIN departments d ON c.department_id = d.department_id
+        LEFT JOIN users u ON c.user_id = u.user_id
+        WHERE c.department_id = ?
+        ORDER BY c.created_at DESC
+      `;
+
+      db.query(query, [department_id], (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows);
+      });
+    });
+  },
+
   // Update complaint status
   updateStatus: (complaint_id, status) => {
     return new Promise((resolve, reject) => {

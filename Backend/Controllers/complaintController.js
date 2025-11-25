@@ -107,10 +107,28 @@ exports.getMyComplaints = async (req, res) => {
     }
 
     const user_id = req.user.user_id;
-    console.log('Fetching complaints for user_id:', user_id);
+    const user_role = req.user.role;
+    const user_department_id = req.user.department_id;
 
-    const list = await Complaint.getByUser(user_id);
-    console.log('Found complaints:', list.length);
+    console.log('User role:', user_role);
+    console.log('User department_id:', user_department_id);
+
+    let list;
+
+    // If user is a department head, show all complaints for their department
+    if (user_role === 'department_head') {
+      if (!user_department_id) {
+        return res.status(400).json({ error: 'Department head must have a department assigned' });
+      }
+      console.log('Fetching complaints for department_id:', user_department_id);
+      list = await Complaint.getByDepartment(user_department_id);
+      console.log('Found department complaints:', list.length);
+    } else {
+      // For students and faculty, show only their own complaints
+      console.log('Fetching complaints for user_id:', user_id);
+      list = await Complaint.getByUser(user_id);
+      console.log('Found user complaints:', list.length);
+    }
 
     // Transform data to match frontend TypeScript interface
     const transformedData = list.map(complaint => ({
