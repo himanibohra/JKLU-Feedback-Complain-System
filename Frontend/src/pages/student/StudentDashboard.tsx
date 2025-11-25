@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MainLayout } from '@/components/layout/MainLayout';
 import { useComplaints } from '@/hooks/useComplaints';
 import { DashboardCards } from '@/components/admin/DashboardCards';
 import { FileText, Clock, CheckCircle, AlertTriangle } from 'lucide-react';
 import { ComplaintList } from '@/components/complaints/ComplaintList';
+import { ComplaintDetailModal } from '@/components/complaints/ComplaintDetailModal';
 
 export const StudentDashboard: React.FC = () => {
     const navigate = useNavigate();
+    const [selectedComplaintId, setSelectedComplaintId] = useState<string | null>(null);
     const { data: complaintsData, isLoading } = useComplaints({ limit: 6 });
+
+    const handleViewDetail = (id: string) => {
+        setSelectedComplaintId(id);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedComplaintId(null);
+    };
 
     const stats = [
         {
@@ -159,8 +169,16 @@ export const StudentDashboard: React.FC = () => {
                     <ComplaintList
                         complaints={complaintsData?.data || []}
                         isLoading={isLoading}
+                        onViewDetail={handleViewDetail}
                     />
                 </div>
+
+                {selectedComplaintId && (
+                    <ComplaintDetailModal
+                        complaintId={selectedComplaintId}
+                        onClose={handleCloseModal}
+                    />
+                )}
             </div>
         </MainLayout>
     );
