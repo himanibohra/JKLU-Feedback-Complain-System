@@ -76,7 +76,7 @@ export const DepartmentDashboard: React.FC = () => {
                                 and ensure timely resolution to maintain a positive campus environment.
                             </p>
                             <p className="text-sm text-gray-600 mt-2 font-medium">
-                                Welcome, <span className="font-bold text-gray-900">{user?.name}</span> - Department Head
+                                Welcome, <span className="font-bold text-gray-900">{user?.name}</span> - {user?.departmentName || 'Department Head'}
                             </p>
                         </div>
                     </div>
