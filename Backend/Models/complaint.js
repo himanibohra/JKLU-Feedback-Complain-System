@@ -140,6 +140,20 @@ const Complaint = {
         else resolve(result);
       });
     });
+  },
+
+  // Delete complaint
+  delete: (complaint_id) => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        DELETE FROM complaints 
+        WHERE complaint_id = ?
+      `;
+      db.query(query, [complaint_id], (err, result) => {
+        if (err) reject(err);
+        else resolve(result);
+      });
+    });
   }
 };
 

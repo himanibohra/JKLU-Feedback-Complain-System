@@ -407,3 +407,43 @@ exports.uploadAttachments = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// Delete complaint
+exports.deleteComplaint = async (req, res) => {
+  try {
+    const complaint_id = req.params.id;
+    const user_id = req.user.user_id;
+    const user_role = req.user.role;
+
+    console.log('=== DELETE COMPLAINT REQUEST ===');
+    console.log('Complaint ID:', complaint_id);
+    console.log('User ID:', user_id);
+    console.log('User Role:', user_role);
+
+    // Get complaint details to verify ownership
+    const complaint = await Complaint.getById(complaint_id);
+
+    if (!complaint) {
+      return res.status(404).json({ error: 'Complaint not found' });
+    }
+
+    // Only allow the complaint owner to delete it
+    // (Students/Faculty can delete their own complaints)
+    if (complaint.user_id !== user_id && user_role !== 'admin') {
+      return res.status(403).json({ error: 'You can only delete your own complaints' });
+    }
+
+    // Delete the complaint (CASCADE will handle related data)
+    await Complaint.delete(complaint_id);
+
+    console.log('✅ Complaint deleted successfully');
+    res.json({
+      message: 'Complaint deleted successfully',
+      id: complaint_id
+    });
+  } catch (err) {
+    console.error('=== ERROR DELETING COMPLAINT ===');
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+};

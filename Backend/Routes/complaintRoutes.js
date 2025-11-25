@@ -26,4 +26,7 @@ router.post("/:id/comments", verifyToken, upload.array("attachments", 5), compla
 // POST /api/complaints/:id/attachments - Upload attachments to complaint
 router.post("/:id/attachments", verifyToken, upload.array("attachments", 5), complaintController.uploadAttachments);
 
+// DELETE /api/complaints/:id - Delete complaint
+router.delete("/:id", verifyToken, complaintController.deleteComplaint);
+
 module.exports = router;
